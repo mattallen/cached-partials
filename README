@@ -1,0 +1,13 @@
+CachedPartials
+=====
+
+This plugin provides caching for partials, automatically triggered on save and destroy from active_record.
+
+It's a set and forget method.
+
+Requirements:
+Spawn
+
+Usage
+-----
+
