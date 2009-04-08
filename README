@@ -1,13 +1,36 @@
-CachedPartials
-=====
+Cached Partials
+=========
 
-This plugin provides caching for partials, automatically triggered on save and destroy from active_record.
+Cached partials allows you to control you cache generation from your models. It's a set and forget method once you have 
+done the initial setup.  Partials will be re-rendered every time a model is created/saved/destroyed.
 
-It's a set and forget method.
+Set it up as follows:
+  
+./script/install plugin git://github.com/tra/spawn.git
+./script/install plugin git://github.com/mattallen/cached-partials.git
 
-Requirements:
-Spawn
+Set up memcache in environment.rb
 
-Usage
------
+config.cache_store = :mem_cache_store, ["localhost", {:namespace => "yourapp-"}]
 
+in environment.rb (or production.rb) include the constants
+  
+CACHE_URL = "http://localhost:3000"
+CACHE_KEY = "some_secrit_key"
+FORCE_KEY = "force"
+
+Make a collection and member folder in the views directory of the models you want to cache.
+
+For Members
+==========
+
+<% cp_cache("model:method:#{record.id}",{:force => params[FORCE_KEY] == "1"}) do %>
+  ## record variable contains your record
+<% end %>
+
+For Collections
+==========
+<% cp_cache("model:method",{:force => params[FORCE_KEY] == "1"}) do %>
+  <% @posts = Post.last_5 %>
+  ## as above, call a named scope or class method to retrieve needed records
+<% end %>
